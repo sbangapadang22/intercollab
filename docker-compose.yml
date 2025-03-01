@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  intercollab-backend:
+    build: ./intercollab-backend  # Updated path
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./intercollab-backend:/app  # Updated path
+    environment:
+      - ENV=development
+      - DEBUG=True
+    depends_on:
+      - intercollab-frontend
+
+  intercollab-frontend:
+    build: ./intercollab-frontend  # Updated path
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./intercollab-frontend:/app  # Updated path
+    environment:
+      - NODE_ENV=development
