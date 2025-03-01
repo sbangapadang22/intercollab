@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import DrawingCanvas from "../components/DrawingCanvas";
+import VideoFeed from "../components/VideoFeed";
 
 const Whiteboard = () => {
   // State to toggle between video and whiteboard
-  const [activeTab, setActiveTab] = useState("whiteboard");
+  const [activeTab, setActiveTab] = useState<string>("whiteboard");
 
   return (
     <div className="p-4 flex flex-col h-screen gap-4">
@@ -43,7 +44,7 @@ const Whiteboard = () => {
         <div className={`border p-4 flex-1 flex flex-col ${activeTab === "video" ? '' : 'hidden'}`}>
           <h2 className="text-xl font-bold mb-4">Video</h2>
           <div className="flex-1 border flex items-center justify-center bg-gray-200">
-            <p>Video Placeholder</p>
+            <VideoFeed active={activeTab === "video"} />
           </div>
         </div>
         
@@ -51,7 +52,7 @@ const Whiteboard = () => {
         <div className="border p-4 flex flex-col w-1/3">
           <h2 className="text-xl font-bold mb-4">Translation</h2>
           <div className="flex-1 flex items-center justify-center bg-gray-100">
-            <p>Translation Placeholder</p>
+            <p>Placeholder</p>
           </div>
         </div>
       </div>
