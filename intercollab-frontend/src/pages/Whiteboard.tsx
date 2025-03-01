@@ -1,3 +1,4 @@
+
 // import React, { useState } from "react";
 // import DrawingCanvas from "../components/DrawingCanvas";
 // import VideoFeed from "../components/VideoFeed";
@@ -66,7 +67,6 @@ import DrawingCanvas from "../components/DrawingCanvas";
 import VideoFeed from "../components/VideoFeed";
 
 const Whiteboard = () => {
-  // State to toggle between video and whiteboard
   const [activeTab, setActiveTab] = useState<string>("whiteboard");
 
   // States for color and lineWidth
@@ -85,7 +85,6 @@ const Whiteboard = () => {
     <div className="p-4 flex flex-col h-screen gap-4">
       {/* Tabs Section */}
       <div className="flex gap-4 mb-4">
-        {/* Whiteboard Tab */}
         <button
           onClick={() => setActiveTab("whiteboard")}
           className={`${
@@ -129,15 +128,18 @@ const Whiteboard = () => {
         >
           <h2 className="text-xl font-bold mb-4">Video</h2>
           <div className="flex-1 border flex items-center justify-center bg-gray-200">
-            <VideoFeed active={activeTab === "video"} />
+            <VideoFeed 
+              active={activeTab === "video"} 
+              onImageCapture={handleImageCapture} 
+            />
           </div>
         </div>
 
         {/* Right - Translation */}
         <div className="border p-4 flex flex-col w-1/3">
           <h2 className="text-xl font-bold mb-4">Translation</h2>
-          <div className="flex-1 flex items-center justify-center bg-gray-100">
-            <p>Placeholder</p>
+          <div className="flex-1 flex flex-col items-center justify-center bg-gray-100">
+            <p> Placeholder </p>
           </div>
         </div>
       </div>
