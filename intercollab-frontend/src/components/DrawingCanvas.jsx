@@ -24,7 +24,7 @@ const DrawingCanvas = () => {
   }, []);
 
   return (
-    <div style={{ border: "1px solid #ccc", margin: "1rem 0" }}>
+    <div style={{ margin: "1rem 0" }}>
       <canvas
         ref={canvasRef}
         width={800}
