@@ -1,32 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import DrawingCanvas from "../components/DrawingCanvas";
 
-
 const Whiteboard = () => {
+  // State to toggle between video and whiteboard
+  const [activeTab, setActiveTab] = useState("whiteboard");
+
   return (
     <div className="p-4 flex flex-col h-screen gap-4">
-      {/* Top Section */}
+      {/* Tabs Section */}
+      <div className="flex gap-4 mb-4">
+        {/* Whiteboard Tab */}
+        <button
+          onClick={() => setActiveTab("whiteboard")}
+          className={`${
+            activeTab === "whiteboard" ? "bg-gray-300" : "bg-white"
+          } p-2 rounded`}
+        >
+          Whiteboard
+        </button>
+        
+        {/* Video Tab */}
+        <button
+          onClick={() => setActiveTab("video")}
+          className={`${
+            activeTab === "video" ? "bg-gray-300" : "bg-white"
+          } p-2 rounded`}
+        >
+          Live Video
+        </button>
+      </div>
+      
+      {/* Content Section */}
       <div className="flex flex-1 gap-4">
-        {/* Left - Whiteboard */}
-        <div className="border p-4 flex-1 flex flex-col">
+        {/* Left - Whiteboard or Video */}
+        <div className={`border p-4 flex-1 flex flex-col ${activeTab === "whiteboard" ? '' : 'hidden'}`}>
           <h2 className="text-xl font-bold mb-4">Whiteboard</h2>
           <div className="flex-1 border">
             <DrawingCanvas />
           </div>
         </div>
-        
-        {/* Right - Video */}
-        <div className="border p-4 flex-1 flex flex-col">
+
+        <div className={`border p-4 flex-1 flex flex-col ${activeTab === "video" ? '' : 'hidden'}`}>
           <h2 className="text-xl font-bold mb-4">Video</h2>
           <div className="flex-1 border flex items-center justify-center bg-gray-200">
             <p>Video Placeholder</p>
           </div>
         </div>
-      </div>
-      
-      {/* Bottom Section - Translation */}
-      <div className="border p-4 h-24 flex items-center justify-center bg-gray-100">
-        <h2 className="text-lg font-bold">Translation Area</h2>
+        
+        {/* Right - Translation */}
+        <div className="border p-4 flex flex-col w-1/3">
+          <h2 className="text-xl font-bold mb-4">Translation</h2>
+          <div className="flex-1 flex items-center justify-center bg-gray-100">
+            <p>Translation Placeholder</p>
+          </div>
+        </div>
       </div>
     </div>
   );
