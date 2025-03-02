@@ -4,3 +4,4 @@ python-multipart
 dotenv
 onnxruntime
 paddleocr
+googletrans==4.0.0-rc1

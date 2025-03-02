@@ -53,3 +53,32 @@ async def debug_model_path():
         "file_size_bytes": file_size,
         "cwd": os.getcwd()
     }
+
+# Add to intercollab-backend/app/main.py
+from pydantic import BaseModel
+from googletrans import Translator
+
+# Create a model for translation requests
+class TranslationRequest(BaseModel):
+    text: str
+    target_language: str
+
+@app.post("/api/translate")
+async def translate_text(request: TranslationRequest):
+    try:
+        translator = Translator()
+        # Use googletrans to translate the text
+        result = translator.translate(
+            request.text, 
+            dest=request.target_language
+        )
+        return {"translated_text": result.text}
+    except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Error translating text: {str(e)}")
+        print(f"Error details: {error_details}")
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e), "details": error_details}
+        )
