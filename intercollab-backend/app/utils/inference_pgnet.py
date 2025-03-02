@@ -13,7 +13,7 @@ from paddleocr.ppocr.data.imaug.operators import (
 )
 from paddleocr.ppocr.postprocess.pg_postprocess import PGPostProcess
 
-from pgnet.chr_dct import chr_dct_list
+from app.utils.pgnet.chr_dct import chr_dct_list
 
 
 class PGNetPredictor:

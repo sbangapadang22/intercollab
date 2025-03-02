@@ -136,7 +136,7 @@ const DrawingCanvas = ({ color, lineWidth, onColorChange, onLineWidthChange }) =
       <canvas
         ref={canvasRef}
         width={800}
-        height={600}
+        height={1000}
         style={{ cursor: tool === "erase" ? "url(https://cdn.jsdelivr.net/gh/anthony-van-leeuwen/canvas-eraser-cursors@v1.1/eraser.cur), pointer" : "crosshair" }}
         className="w-full h-full bg-white border"
         onMouseDown={startDrawing}

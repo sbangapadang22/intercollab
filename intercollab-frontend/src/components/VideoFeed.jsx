@@ -13,11 +13,11 @@ const VideoFeed = ({ active, onImageCapture }) => {
   // Ref for video element
   const videoRef = useRef(null);
   
-  // Ref for the capture interval
-  const captureIntervalRef = useRef(null);
-  
   // State to store the latest captured image
   const [capturedImage, setCapturedImage] = useState(null);
+  
+  // State to manage video visibility
+  const [isVideoVisible, setIsVideoVisible] = useState(true);
 
   // Function to capture image from video
   const captureImage = useCallback(() => {
@@ -39,6 +39,28 @@ const VideoFeed = ({ active, onImageCapture }) => {
     // Convert canvas to image data URL
     const imageDataUrl = canvas.toDataURL("image/jpeg");
     
+    // Convert data URL to Blob
+    fetch(imageDataUrl)
+      .then(res => res.blob())
+      .then(blob => {
+        // Create FormData and append the Blob
+        const formData = new FormData();
+        formData.append("file", blob, "captured_image.jpg");
+
+        // Send the image to the backend
+        fetch("http://localhost:8000/api/handwriting", {
+          method: "POST",
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Image processed:", data);
+        })
+        .catch(error => {
+          console.error("Error uploading image:", error);
+        });
+      });
+
     // Update state with new image
     setCapturedImage(imageDataUrl);
     
@@ -61,54 +83,58 @@ const VideoFeed = ({ active, onImageCapture }) => {
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
           }
-          
-          // Setup interval to capture image every 10 seconds
-          captureIntervalRef.current = window.setInterval(captureImage, 10000);
         })
         .catch((error) => {
           console.error("Error accessing camera: ", error);
         });
     } else if (!active && cameraStreamRef.current) {
-      // Stop camera and clear interval
-      if (captureIntervalRef.current !== null) {
-        clearInterval(captureIntervalRef.current);
-        captureIntervalRef.current = null;
-      }
-      
+      // Stop camera
       cameraStreamRef.current.getTracks().forEach((track) => track.stop());
       cameraStreamRef.current = null;
     }
 
     // Cleanup on unmount
     return () => {
-      if (captureIntervalRef.current !== null) {
-        clearInterval(captureIntervalRef.current);
-        captureIntervalRef.current = null;
-      }
-      
       if (cameraStreamRef.current) {
         cameraStreamRef.current.getTracks().forEach((track) => track.stop());
         cameraStreamRef.current = null;
       }
     };
-  }, [active, captureImage]);
+  }, [active]);
+
+  // Handle video visibility changes
+  useEffect(() => {
+    if (isVideoVisible && cameraStreamRef.current && videoRef.current) {
+      videoRef.current.srcObject = cameraStreamRef.current;
+    }
+  }, [isVideoVisible]);
 
   return (
     <div className="relative w-full h-full">
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        playsInline
-        className="w-full h-full object-cover"
-      />
+      {isVideoVisible && (
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        />
+      )}
       
-      {/* Optional: Add a button to manually trigger capture */}
+      {/* Button to manually trigger capture */}
       <button 
         onClick={captureImage}
         className="absolute bottom-4 right-4 bg-blue-500 text-white px-3 py-1 rounded"
       >
         Capture Now
+      </button>
+
+      {/* Button to toggle video visibility */}
+      <button 
+        onClick={() => setIsVideoVisible((prev) => !prev)}
+        className="absolute bottom-4 left-4 bg-green-500 text-white px-3 py-1 rounded"
+      >
+        {isVideoVisible ? "Hide Video" : "Show Video"}
       </button>
     </div>
   );
