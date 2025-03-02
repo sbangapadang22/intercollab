@@ -29,9 +29,13 @@ async def process_image(image_data: str = Form(...)):
         image_bytes = base64.b64decode(image_data)
         
         # Process the image using the utility function
-        recognized_text = get_text_prediction(image_bytes)
+        recognized_text, annotated_image = get_text_prediction(image_bytes)
         
-        return {"status": "success", "text": recognized_text}
+        return {
+            "status": "success", 
+            "text": recognized_text,
+            "annotated_image": annotated_image
+        }
     except Exception as e:
         import traceback
         error_details = traceback.format_exc()

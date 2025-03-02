@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
-import DrawingCanvas from "../components/DrawingCanvas";
 import VideoFeed from "../components/VideoFeed";
 import { useLatestImage } from "../hooks/Image";
 import axios from "axios";
 
 const Whiteboard = () => {
-  // States for color and lineWidth
-  const [color, setColor] = useState("black");
-  const [lineWidth, setLineWidth] = useState(5);
-  
   // State for language selection
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [translatedText, setTranslatedText] = useState("");
@@ -38,14 +33,6 @@ const Whiteboard = () => {
     
     translateText();
   }, [recognizedText, selectedLanguage]);
-
-  const handleColorChange = (newColor: string) => {
-    setColor(newColor);
-  };
-
-  const handleLineWidthChange = (newLineWidth: number) => {
-    setLineWidth(newLineWidth);
-  };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedLanguage(e.target.value);
@@ -108,17 +95,28 @@ const Whiteboard = () => {
           </div>
         </div>
 
-        {/* Right - Whiteboard */}
+        {/* Right - Output Image (replaced whiteboard) */}
         <div className="border p-4 flex-1 flex flex-col">
-          <h2 className="text-xl font-bold mb-4">Whiteboard</h2>
-          <div className="flex-1 border">
-            <DrawingCanvas 
-              color={color} 
-              lineWidth={lineWidth} 
-              onColorChange={handleColorChange} 
-              onLineWidthChange={handleLineWidthChange} 
-            />
+          <h2 className="text-xl font-bold mb-4">Output Image</h2>
+          <div className="flex-1 border flex items-center justify-center bg-gray-100">
+            {latestImage ? (
+              <img 
+                src={latestImage} 
+                alt="Captured" 
+                className="max-w-full max-h-full object-contain"
+              />
+            ) : (
+              <p className="text-gray-500">No image captured yet. Use the video feed to capture an image.</p>
+            )}
           </div>
+          {recognizedText && (
+            <div className="mt-4 pt-2 border-t">
+              <h3 className="font-semibold mb-2">Detected Text:</h3>
+              <p className="bg-gray-100 p-3 rounded">
+                {selectedLanguage !== "en" && translatedText ? translatedText : recognizedText}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

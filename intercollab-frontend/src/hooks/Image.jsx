@@ -21,6 +21,10 @@ export const useLatestImage = () => {
       console.log("Sending image for processing...");
       const result = await processImage(imageData);
       setRecognizedText(result.text);
+      // Update the latest image with the annotated version from the backend
+      if (result.annotated_image) {
+        setLatestImage(result.annotated_image);
+      }
       console.log("Recognized text:", result.text);
     } catch (err) {
       setError("Failed to process image");
