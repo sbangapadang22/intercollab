@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DrawingCanvas from "../components/DrawingCanvas";
-import VideoFeed from "../components/VideoFeed";
+import VideoFeed from "../components/VideoFeedTwo";
 
 const Whiteboard = () => {
   // State to toggle between video and whiteboard
