@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate} from "react-router-dom";
 import Whiteboard from "./pages/Whiteboard";
 
 const App = () => {
@@ -10,6 +10,7 @@ const App = () => {
       </nav>
       <Routes>
         <Route path="/whiteboard" element={<Whiteboard />} />
+        <Route path="/" element={<Navigate to ="/whiteboard" replace />} />
       </Routes>
     </Router>
   );
