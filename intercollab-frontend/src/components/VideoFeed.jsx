@@ -38,28 +38,6 @@ const VideoFeed = ({ active, onImageCapture }) => {
     
     // Convert canvas to image data URL
     const imageDataUrl = canvas.toDataURL("image/jpeg");
-    
-    // Convert data URL to Blob
-    fetch(imageDataUrl)
-      .then(res => res.blob())
-      .then(blob => {
-        // Create FormData and append the Blob
-        const formData = new FormData();
-        formData.append("file", blob, "captured_image.jpg");
-
-        // Send the image to the backend
-        fetch("http://localhost:8000/api/handwriting", {
-          method: "POST",
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log("Image processed:", data);
-        })
-        .catch(error => {
-          console.error("Error uploading image:", error);
-        });
-      });
 
     // Update state with new image
     setCapturedImage(imageDataUrl);

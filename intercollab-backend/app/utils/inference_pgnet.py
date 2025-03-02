@@ -16,24 +16,22 @@ from paddleocr.ppocr.postprocess.pg_postprocess import PGPostProcess
 from app.utils.pgnet.chr_dct import chr_dct_list
 
 
+# intercollab-backend/app/utils/inference_pgnet.py
 class PGNetPredictor:
-    """
-    This class encapsulates the entire process of loading an ONNX model for PGNet,
-    preprocessing input images, performing inference, and postprocessing the results
-    to obtain bounding boxes and text strings.
-    """
-
-    def __init__(self, img_path, cpu):
+    def __init__(self, img_path, cpu, model_path=None):
         """
         Constructor for the PGNetPredictor class.
         
         Args:
             img_path (str): Path to the input image.
             cpu (bool): Whether to run inference on CPU. If False, GPU (CUDA) is used.
+            model_path (str, optional): Path to the ONNX model file.
         """
         self.img_path = img_path
         # We need a dictionary file (ic15_dict.txt) that maps indices to characters.
-        self.dict_path = "ic15_dict.txt"
+        # Use absolute path to ensure it's found
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.dict_path = os.path.join(base_dir, "ic15_dict.txt")
         
         # If the dictionary file doesn't exist, create it using chr_dct_list (from pgnet.chr_dct).
         if not os.path.exists(self.dict_path):
@@ -46,8 +44,12 @@ class PGNetPredictor:
         else:
             providers = ["CPUExecutionProvider"]
         
+        # Use the provided model path or raise an error if none given
+        if model_path is None:
+            raise ValueError("model_path must be provided")
+            
         # Create an ONNXRuntime session with the specified providers (CPU or GPU).
-        self.sess = onnxruntime.InferenceSession(args.model_path, providers=providers)
+        self.sess = onnxruntime.InferenceSession(model_path, providers=providers)
 
     def preprocess(self, img_path):
         """
