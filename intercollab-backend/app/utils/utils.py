@@ -29,7 +29,7 @@ def get_annotated_image(image_bytes, text_boxes, recognized_texts):
     # Draw bounding boxes and text (similar to PGNetPredictor.draw)
     for box, text_str in zip(text_boxes, recognized_texts):
         box = box.astype(np.int32).reshape((-1, 1, 2))
-        cv2.polylines(image, [box], True, color=(0, 0, 0), thickness=2)
+        cv2.polylines(image, [box], True, color=(255, 255, 0), thickness=2)
         
         # Write text near the box
         cv2.putText(
@@ -82,3 +82,4 @@ def get_text_prediction(image_bytes):
         # Clean up the temporary file
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
+
