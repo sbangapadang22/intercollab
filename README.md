@@ -94,4 +94,3 @@ InterCollab/
   docker-compose up --build
   ```
 
-https://github.com/kuroko1t/onnx-ocr/releases/download/0.1/pgnet.onnx
